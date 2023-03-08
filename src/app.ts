@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import {userRouter} from "./routers/user.router";
 import {IError} from "./types/common.types";
 import {configs} from "./configs/config";
+import {authRouter} from "./routers/auth.router";
 
 
 const app = express();
@@ -13,6 +14,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/users", userRouter);
+app.use("/auth", authRouter);
+
+
 
 app.use((err:IError, req:Request, res:Response, next: NextFunction)=>{
 

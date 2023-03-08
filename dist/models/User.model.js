@@ -22,5 +22,8 @@ const userSchema = new mongoose_1.Schema({
         type: String,
         enum: user_type_1.EGenders
     }
+}, {
+    versionKey: false,
+    timestamps: true
 });
 exports.User = (0, mongoose_1.model)("user", userSchema);

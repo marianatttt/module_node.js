@@ -21,6 +21,9 @@ const userSchema = new Schema ({
         type: String,
         enum: EGenders
     }
+},{
+    versionKey:false,
+    timestamps:true
 })
 
 export const User = model ("user", userSchema);
