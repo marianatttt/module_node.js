@@ -1,13 +1,16 @@
 import {NextFunction, Response, Request} from "express";
 
-import {User} from "../models/User.model";
-import {ApiError} from "../errors/api.error";
+import {User} from "../models";
+import {ApiError} from "../errors";
 import {UserValidator} from "../validators";
 import { isObjectIdOrHexString} from "mongoose";
-import {IRequest} from "../types/common.types";
 
 class UserMiddleware {
-    public async getByIdOrThrow(req: Request, res: Response, next: NextFunction): Promise<void> {
+    public async getByIdOrThrow(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> {
         try {
             const {userId} = req.params;
             const user = await User.findById(userId);
@@ -16,7 +19,7 @@ class UserMiddleware {
                 throw new ApiError('User not found', 422);
             }
 
-            res.locals.user = user;
+            res.locals.user = {user};
             next();
         } catch (e) {
             next(e);
@@ -24,7 +27,11 @@ class UserMiddleware {
     }
 
 
-    public async isUserValidCreate(req: Request, res: Response, next: NextFunction): Promise<void> {
+    public async isUserValidCreate(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> {
         try {
             const { error, value } = UserValidator.createUser.validate(req.body);
 
@@ -71,10 +78,10 @@ class UserMiddleware {
 
     public getDynamicallyAndThrow(
         fieldName: string,
-        from = "body",
+        from:"body"| "query" | "params" = "body",
         dbField = fieldName
     ) {
-        return async (req: IRequest, res: Response, next: NextFunction) => {
+        return async (req: Request, res: Response, next: NextFunction) => {
             try {
                 const fieldValue = req[from][fieldName];
 
@@ -97,10 +104,10 @@ class UserMiddleware {
 
     public getDynamicallyOrThrow(
         fieldName: string,
-        from = "body",
+        from:"body"| "query" | "params" = "body",
         dbField = fieldName
     ) {
-        return async (req: IRequest, res: Response, next: NextFunction) => {
+        return async (req: Request, res: Response, next: NextFunction) => {
             try {
                 const fieldValue = req[from][fieldName];
 
@@ -137,18 +144,6 @@ class UserMiddleware {
             next(e);
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
 
