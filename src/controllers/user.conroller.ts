@@ -1,21 +1,29 @@
 import {Response, Request, NextFunction} from "express";
 
-import {User} from "../models/User.model";
-import {IUser} from "../types/user.type";
-import {userService} from "../services/user.servic";
-import {IMessage} from "../types/common.types";
+import {User} from "../models";
+import {IUser, IMessage} from "../types";
+import {userService} from "../services";
 
 class UserController {
-    public async getAll(req: Request, res: Response, next:NextFunction): Promise<Response<IUser[]>> {
+    public async getAll(
+        req: Request,
+        res: Response,
+        next:NextFunction
+    ): Promise<Response<IUser[]>> {
         try{
             const users = await userService.getAll();
+
             return res.json(users);
         }catch (e) {
             next(e)
         }
     }
 
-    public async getById(req: Request, res: Response, next:NextFunction): Promise<Response<IMessage>> {
+    public async getById(
+        req: Request,
+        res: Response,
+        next:NextFunction
+    ): Promise<Response<IMessage>> {
         try{
             const {user} = res.locals;
             return res.json(user)  
@@ -24,10 +32,14 @@ class UserController {
         }
     }
 
-    public async create(req: Request, res: Response, next:NextFunction): Promise<Response<IUser>> {
+    public async create(
+        req: Request,
+        res: Response,
+        next:NextFunction
+    ): Promise<Response<IUser>> {
         try {
             const body = req.body;
-            const user = await User.create({...body});
+            const user = await User.create(body);
 
             return res.status(201).json({
                 message: "User Created",
@@ -38,11 +50,19 @@ class UserController {
         }
     }
 
-    public async update(req: Request, res: Response, next:NextFunction): Promise<Response<IUser>> {
+    public async update(
+        req: Request,
+        res: Response,
+        next:NextFunction
+    ): Promise<Response<IUser>> {
         try {
             const {userId} = req.params;
 
-            const updateUser = await User.findByIdAndUpdate(userId, {...req.body}, {new: true});
+            const updateUser = await User.findByIdAndUpdate(
+                userId,
+                {...req.body},
+                {new: true}
+            );
 
             return res.status(201).json(updateUser)
         } catch (e) {
@@ -50,7 +70,11 @@ class UserController {
         }
     }
 
-    public async delete(req: Request, res: Response, next:NextFunction): Promise<Response<void>> {
+    public async delete(
+        req: Request,
+        res: Response,
+        next:NextFunction
+    ): Promise<Response<void>> {
         try {
             const {userId} = req.params;
             await User.deleteOne({_id: userId});

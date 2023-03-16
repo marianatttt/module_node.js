@@ -1,6 +1,6 @@
-import {User} from "../models/User.model";
-import {IUser} from "../types/user.type";
-import {ApiError} from "../errors/api.error";
+import {User} from "../models";
+import {IUser} from "../types";
+import {ApiError} from "../errors";
 
 class UserService {
  public async getAll ():Promise<IUser[]>{

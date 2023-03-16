@@ -1,7 +1,8 @@
 import * as Joi from "joi";
 
 import {regexConstant} from "../constants";
-import {EGenders} from "../types/user.type";
+import {EGenders} from "../enums";
+
 export class UserValidator{
     private static firstName = Joi.string().min(2).max(50).trim();
     private static email = Joi.string().regex(regexConstant.EMAIL).max(50).lowercase().trim();
